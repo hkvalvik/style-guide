@@ -1,5 +1,5 @@
 {
-  "name": "styleguide",
+  "name": "style-guide",
   "version": "0.0.0",
   "description": "",
   "scripts": {},
@@ -17,5 +17,9 @@
   },
   "dependencies": {
     "walk": "~2.3.9"
-  }
+  },
+  "files": [
+    "tasks",
+    "LICENSE-MIT"
+  ]
 }
