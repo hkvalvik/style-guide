@@ -1,0 +1,93 @@
+var fs = require('fs');
+var path = require('path');
+var walk = require('walk');
+var sizeOf = require('image-size');
+var extend = require('util')._extend;
+
+function Component(options){
+    return extend(
+        {
+            name: null,
+            images: []
+        },
+        options
+    );
+}
+
+function Image(options){
+    return extend(
+        {
+            file: null,
+            width: null,
+            height: null
+        },
+        options
+    );
+}
+
+var StyleGuide = function(src){
+
+    return {
+
+        _src: src,
+
+        _components: {},
+
+        _init: function(){
+
+            var components = this._components;
+
+            var options = {
+                listeners: {
+                    directories: this._addComponent.bind(this),
+                    file: this._addImage.bind(this),
+                    errors: this._onError.bind(this)
+                }
+            };
+
+            src = src.split('/').join(path.sep); // Looks like a problem with paths in node-walk
+            var walker = walk.walkSync(src, options);
+
+            return this;
+        },
+
+        _addComponent: function (root, dirStatsArray, next) {
+            var name = dirStatsArray[0].name;
+            this._components[name] = new Component({
+                name: name
+            });
+            next();
+        },
+
+        _addImage: function(root, fileStats, next) {
+            var fileName = path.join(root, fileStats.name);
+            var dimensions = sizeOf(fileName);
+            var directoryName = root.split(path.sep).pop();
+            this._components[directoryName].images.push(
+                new Image({
+                    file: fileName,
+                    width: dimensions.width,
+                    height: dimensions.height
+                })
+            );
+            next();
+        },
+
+        _onError: function(root, nodeStatsArray, next) {
+            console.error(arguments)
+            next();
+        },
+
+        toJson: function(){
+            return JSON.stringify(this._components);
+        },
+
+        saveJson: function(dest){
+            var json = this.toJson();
+            fs.writeFileSync(dest, json);
+        }
+
+    }._init();
+};
+
+module.exports = StyleGuide;
