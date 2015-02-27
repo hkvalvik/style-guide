@@ -70,18 +70,21 @@ var StyleGuide = function(src){
         _addImage: function(root, fileStats, next) {
             var fileName = path.join(root, fileStats.name);
             fileName = fileName.replace(/\\/g, '/');
-            var label = fileStats.name.split('.').shift();
-            var dimensions = sizeOf(fileName);
-            var directoryName = root.split(path.sep).pop();
-            this._addComponentByName(directoryName);
-            this._components[directoryName].images.push(
-                new Image({
-                    label: label,
-                    file: fileName,
-                    width: dimensions.width,
-                    height: dimensions.height
-                })
-            );
+            var ext = fileStats.name.split('.').pop();
+            if(['jpg', 'png', 'gif'].indexOf(ext) > -1){
+                var label = fileStats.name.split('.').shift();
+                var dimensions = sizeOf(fileName);
+                var directoryName = root.split(path.sep).pop();
+                this._addComponentByName(directoryName);
+                this._components[directoryName].images.push(
+                    new Image({
+                        label: label,
+                        file: fileName,
+                        width: dimensions.width,
+                        height: dimensions.height
+                    })
+                );
+            }
             next();
         },
 
