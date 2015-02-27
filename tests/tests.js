@@ -1,4 +1,4 @@
 var StyleGuide = require('../index.js');
 
-var styleGuide = new StyleGuide('fixtures');
-styleGuide.saveJson('results/result.json');
+var styleGuide = new StyleGuide('tests/fixtures');
+styleGuide.saveJson('tests/result/result.json');

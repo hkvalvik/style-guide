@@ -1,0 +1,125 @@
+<html>
+<head>
+    <link rel="stylesheet" href="../client.min.css">
+    <script src="../client.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            new Geta.SG.Main($('body'), {
+                dataFile: 'result/result.json',
+                imageResolver: function(path){ return '/' + path; }
+            });
+        });
+    </script>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 101%;
+        }
+
+        /* my-nav */
+
+        .my-nav {
+            padding: 36px 63px;
+            background-color: dodgerblue;
+            color: #fff;
+            font-family: arial, helvetica, clean, sans-serif;
+            font-size: 16px;
+        }
+
+        .my-nav ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            overflow: hidden;
+        }
+
+        .my-nav li {
+            float: left;
+            margin-right: 20px;
+        }
+
+        .my-nav a {
+            display: block;
+            color: inherit;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        @media screen and (min-width: 808px) and (max-width: 1479px) {
+
+            .my-nav {
+                padding: 36px 20px;
+            }
+
+            .my-nav li {
+                float: none;
+                text-align: center;
+                margin-right: 0;
+                margin-bottom: 10px;
+                font-size: 14px;
+            }
+
+            .my-nav li:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        @media screen and (max-width: 807px) {
+
+            .my-nav {
+                padding: 30px 20px;
+                font-size: 12px;
+            }
+
+            .my-nav li {
+                float: none;
+                text-align: center;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .my-nav li:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        /* my-component */
+
+        .my-component {
+            font-family: arial, helvetica, clean, sans-serif;
+            color: #444;
+            background-color: lightcoral;
+            padding: 15px 20px 20px 20px;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+        }
+
+        .my-component h2 {
+            text-transform: uppercase;
+        }
+
+    </style>
+</head>
+<body>
+<nav class="my-nav" data-sg-component='my-nav'>
+    <ul>
+        <li><a href="#">Nav item one</a></li>
+        <li><a href="#">Nav item two</a></li>
+        <li><a href="#">Nav item three</a></li>
+        <li><a href="#">Nav item four</a></li>
+        <li><a href="#">Nav item five</a></li>
+    </ul>
+</nav>
+<section class="my-component" data-sg-component='my-component'>
+    <h2>My component</h2>
+    <p>
+        Hello world
+    </p>
+</section>
+</body>
+</html>

@@ -1,0 +1,12 @@
+<header>
+    <h2>{{name}}</h2>
+    <button class="sg-design-ui-buttons-toggle" data-buttons-toggle></button>
+</header>
+<div class="sg-design-ui-buttons" data-buttons>
+    {{#each images}}
+        <button value='{{#stringify this}}{{/stringify}}'>
+            <span class="sg-design-ui-button-width" style="width: {{this.width}}px"></span>
+            <span class="sg-design-ui-button-label">{{this.label}}</span>
+        </button>
+    {{/each}}
+</div>

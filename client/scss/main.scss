@@ -1,0 +1,267 @@
+$sg-color-primary: #1297d7 !default;
+$sg-color-primary-contrast: #666 !default;
+$sg-color-secondary: #fafafa !default;
+$sg-color-tertiary: adjust_hue($sg-color-primary, 20deg) !default;
+$sg-gutter: 20px !default;
+$sg-font-size: 14px !default;
+$sg-font-family: arial, helvetica, clean, sans-serif !default;
+
+@mixin sg-button-reset {
+  background: none;
+  border: none;
+  text-transform: uppercase;
+  font-family: $sg-font-family;
+  font-size: $sg-font-size;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+@mixin sg-button-with-states {
+  @include sg-button-reset;
+  transition: box-shadow .5s;
+
+  &:hover {
+    box-shadow: 0 0 10px rgba(black, .5);
+  }
+
+  &:active {
+    box-shadow: 0 0 20px rgba(black, .5);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(black, .5);
+  }
+}
+
+.sg-component {
+  border-top: solid 1px #eee;
+  margin-bottom: 40px;
+}
+
+.sg-design-ui {
+  background-color: $sg-color-secondary;
+  overflow: hidden;
+
+  header {
+    overflow: hidden;
+    position: relative;
+    padding: $sg-gutter/2;
+    border-bottom: solid 1px rgba(white, .25);
+
+    h2 {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      margin: 0;
+      padding: 0;
+      font-family: $sg-font-family;
+      font-size: $sg-font-size;
+      font-weight: normal;
+      color: $sg-color-primary-contrast;
+      text-transform: uppercase;
+    }
+
+    .sg-design-ui-buttons-toggle {
+      @include sg-button-with-states;
+      position: relative;
+      top: 5px;
+      right: 5px;
+      float: right;
+      width: $sg-gutter*2;
+      height: $sg-gutter*2;
+      background-color: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 1px rgba(black, .1);
+
+      &:before,
+      &:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        border-style: solid;
+        border-width: 7px 11px 11px 11px;
+      }
+
+      &:before {
+        border-color: black transparent transparent transparent;
+        margin-top: 8px;
+      }
+
+      &:after {
+        border-color: white transparent transparent transparent;
+        margin-top: 7px;
+      }
+    }
+  }
+
+  .sg-design-ui-buttons {
+    max-height: 0;
+    transition: all .5s;
+    overflow: hidden;
+    padding-top: 0;
+    background-color: #444;
+
+    button {
+      @include sg-button-with-states;
+      position: relative;
+      display: block;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: rgba($sg-color-primary, .1);
+      color: #fff;
+      margin-bottom: 1px;
+      padding: ($sg-gutter/2) ($sg-gutter*2);
+      transition: box-shadow .5s;
+      box-shadow: 0 0 0 rgba(black, 0);
+
+      .sg-design-ui-button-label {
+        display: block;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 10px;
+        font-size: 10px;
+      }
+
+      .sg-design-ui-button-width {
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        transform: translateX(-50%);
+        background-color: rgba($sg-color-primary, .5);
+      }
+
+      &.on {
+        .sg-design-ui-button-width{
+          background-color: $sg-color-primary;
+        }
+      }
+    }
+
+    &.on {
+      max-height: 200px;
+      padding-top: 1px;
+    }
+  }
+}
+
+.sg-design-comparator {
+  position: relative;
+  height: 0;
+  padding-left: $sg-gutter/2;
+  padding-right: $sg-gutter/2;
+  overflow: hidden;
+  transition: all .5s;
+  background-color: #333;
+  color: #fff;
+  box-shadow: inset 0 -2.5px 10px rgba(0,0,0,.5);
+
+  label {
+    font-family: $sg-font-family;
+    font-size: $sg-font-size;
+    color: $sg-color-primary-contrast;
+    text-transform: uppercase;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 160px;
+    height: 20px;
+    background: linear-gradient(to right, #fff 0%, #fff 100%);
+    background-size: 150px 10px;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+
+    &::-webkit-slider-thumb{
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: $sg-color-primary;
+      position: relative;
+      z-index: 3;
+      transition: box-shadow .5s;
+      box-shadow: 0 0 5px 0 rgba(black, .25);
+    }
+
+    &::-webkit-slider-thumb:after{
+      content:" ";
+      width:160px;
+      height:10px;
+      position:absolute;
+      z-index:1;
+      right:20px;
+      top:5px;
+      background: $sg-color-primary;
+      background: linear-gradient(to right, $sg-color-tertiary 1%, $sg-color-tertiary 70%);
+    }
+
+    &:focus {
+      outline: none;
+
+      &::-webkit-slider-thumb{
+        box-shadow: 0 0 10px 0 rgba(black, .75);
+      }
+    }
+  }
+
+  .opacity-slider {
+    position: absolute;
+    z-index: 0;
+    right: 0;
+    top: -$sg-gutter*2;
+    left: 0;
+    text-align: center;
+    transition: top .5s;
+
+    button {
+      @include sg-button-with-states;
+      position: relative;
+      top: -5px;
+      padding: ($sg-gutter/4) ($sg-gutter/2);
+      display: inline-block;
+      color: inherit;
+    }
+
+    input[type="range"]{
+      margin: 0 $sg-gutter;
+    }
+  }
+
+  iframe,
+  img {
+    position: absolute;
+    bottom: $sg-gutter/2;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  iframe {
+    border: none 0;
+    transition: width .5s, height .5s;
+  }
+
+  img {
+    max-width: none;
+    max-height: none;
+    min-width: 0;
+    min-height: 0;
+    pointer-events: none;
+  }
+
+  // States
+
+  &.on {
+    padding-top: $sg-gutter/2;
+    padding-bottom: $sg-gutter*2;
+
+    .opacity-slider {
+      top: $sg-gutter/2;
+    }
+  }
+}
