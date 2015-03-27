@@ -62,4 +62,3 @@ window.Geta.SG.Main = function(element, options){
 
     }._init();
 };
-

@@ -16,7 +16,6 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'client.min.js': [
-                        'node_modules/jquery/dist/jquery.min.js',
                         'node_modules/handlebars/dist/handlebars.min.js',
                         'client/namespace/namespace.js',
                         'client/**/*.js'
