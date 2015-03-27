@@ -7,7 +7,9 @@ window.Geta.SG.DesignComparator = function(element, options){
 
         options: $.extend(
             {
-                cssClass: 'sg-design-comparator'
+                cssClass: 'sg-design-comparator',
+                iframeHtml: function(html){ return html; },
+                iframeReady: function(iframe){}
             },
             options
         ),
@@ -51,8 +53,9 @@ window.Geta.SG.DesignComparator = function(element, options){
             if(!this._iframeIsPopulated) {
                 var html = $('<div></div>').append(element.clone()).html();
                 html += this._getDocumentStyles();
-                this._iframe.attr('srcdoc', html);
+                this._iframe.attr('srcdoc', this.options.iframeHtml(html));
                 this._iframeIsPopulated = true;
+                this.options.iframeReady(this._iframe);
             }
 
             this._iframe.width(imageData.width);

@@ -11,7 +11,9 @@ window.Geta.SG.Component = function(element, options) {
             {
                 cssClass: 'sg-component',
                 name: null,
-                images: []
+                images: [],
+                iframeHtml: function(html){ return html; },
+                iframeReady: function(iframe){}
             },
             options
         ),
@@ -30,9 +32,13 @@ window.Geta.SG.Component = function(element, options) {
             this._createContainer();
             this._initDesignUi();
             this._initDesignComparator();
-            this.element.appendTo(this._container);
+            this._initElementContainer();
             return this;
         },
+
+        //
+        // Dom
+        //
 
         _createContainer: function() {
             this._container = $('<div></div>')
@@ -55,8 +61,21 @@ window.Geta.SG.Component = function(element, options) {
 
         _initDesignComparator: function(){
             var element = $('<div></div>').appendTo(this._container);
-            this._designComparator = new Geta.SG.DesignComparator(element);
+            this._designComparator = new Geta.SG.DesignComparator(element, {
+                iframeHtml: this.options.iframeHtml,
+                iframeReady: this.options.iframeReady
+            });
         },
+
+        _initElementContainer: function(){
+            var element = $('<div></div>').appendTo(this._container);
+            this.element.appendTo(element);
+            new window.Geta.SG.Element(element);
+        },
+
+        //
+        // Callbacks
+        //
 
         _compare: function(imageData){
             this._designComparator.compare(this.element, imageData);

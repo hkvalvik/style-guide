@@ -8,7 +8,10 @@ window.Geta.SG.Main = function(element, options){
         options: $.extend(
             {
                 dataFile: null,
-                imageResolver: function(path){ return path; }
+                imageResolver: function(path){ return path; },
+                ready: $.noop,
+                iframeHtml: function(html){ return html; },
+                iframeReady: function(iframe){}
             },
             options
         ),
@@ -33,6 +36,7 @@ window.Geta.SG.Main = function(element, options){
         _onDataLoaded: function(data){
             this._data = data;
             $.each(this._data, $.proxy(this._initComponent, this));
+            this.options.ready();
         },
 
         //
@@ -49,7 +53,9 @@ window.Geta.SG.Main = function(element, options){
             var element = $(el);
             new Geta.SG.Component(element, {
                 name: componentData.name,
-                images: componentData.images
+                images: componentData.images,
+                iframeHtml: this.options.iframeHtml,
+                iframeReady: this.options.iframeReady
             });
         },
 
