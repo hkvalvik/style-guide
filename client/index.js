@@ -7,6 +7,7 @@ window.Geta.SG.Main = function(element, options){
 
         options: $.extend(
             {
+                heading: undefined,
                 dataFile: null,
                 imageResolver: function(path){ return path; },
                 ready: $.noop,
@@ -25,8 +26,17 @@ window.Geta.SG.Main = function(element, options){
         //
 
         _init: function(){
+            this._initLayout();
             $.get(this.options.dataFile, $.proxy(this._onDataLoaded, this));
             return this;
+        },
+
+        _initLayout: function(){
+            var element = this.element.find('[data-sg-layout]');
+            if(element.length == 0){
+                element = $('<div></div>').appendTo(this.element);
+            }
+            new window.Geta.SG.Layout(element, {heading: this.options.heading});
         },
 
         //
@@ -35,13 +45,29 @@ window.Geta.SG.Main = function(element, options){
 
         _onDataLoaded: function(data){
             this._data = data;
+            this._initNav(data);
             $.each(this._data, $.proxy(this._initComponent, this));
             this.options.ready();
+        },
+
+        _onComponentSelect: function(id){
+            var target = this.element.find('#component-' + id);
+            $('html, body').animate({
+                scrollTop: target.offset().top
+            }, 500);
         },
 
         //
         // Helpers
         //
+
+        _initNav: function(data){
+            var element = this.element.find('[data-sg-layout-nav]');
+            new window.Geta.SG.Nav(element, {
+                components: data,
+                onSelect: $.proxy(this._onComponentSelect, this)
+            });
+        },
 
         _initComponent: function(i, componentData){
             var elements = this.element.find('[data-sg-component="'+componentData.name+'"], [data-sg-overlay="'+componentData.name+'"]');
@@ -50,10 +76,25 @@ window.Geta.SG.Main = function(element, options){
         },
 
         _initComponentElement: function(componentData, i, el){
-            var element = $(el);
+            var element;
+            if(componentData.html){
+                element = $(componentData.html);
+                $(el).replaceWith(element);
+                console.log("...", el)
+            }
+            else {
+                var element = $(el);
+                element.removeAttr('data-sg-component');
+            }
+
+            var componentContainer = this.element.find('[data-sg-layout-components]');
+            element.appendTo(componentContainer);
+
             new Geta.SG.Component(element, {
+                id: componentData.id,
                 name: componentData.name,
                 images: componentData.images,
+                documentation: componentData.documentation,
                 iframeHtml: this.options.iframeHtml,
                 iframeReady: this.options.iframeReady
             });

@@ -1,10 +1,12 @@
 <html>
 <head>
     <link rel="stylesheet" href="../client.min.css">
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../client.min.js"></script>
     <script>
         $(document).ready(function(){
             new Geta.SG.Main($('body'), {
+                heading: 'My style guide',
                 dataFile: 'result/result.json',
                 imageResolver: function(path){ return '/' + path; }
             });
@@ -19,6 +21,33 @@
 
         body {
             min-height: 101%;
+        }
+
+        main {
+            width: 100%;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* html-only */
+
+        .html-only {
+            background-color: lightgreen;
+            padding: 40px;
+            text-align: center;
+            text-transform: uppercase;
+            color: #444;
+            font-family: arial, helvetica, clean, sans-serif;
+            font-size: 14px;
+        }
+
+        .html-only em {
+            display: block;
+            font-weight: bold;
+            font-size: 18px;
+            font-style: normal;
+            margin-top: 20px;
         }
 
         /* my-nav */
@@ -106,20 +135,27 @@
     </style>
 </head>
 <body>
-<nav class="my-nav" data-sg-component='my-nav'>
-    <ul>
-        <li><a href="#">Nav item one</a></li>
-        <li><a href="#">Nav item two</a></li>
-        <li><a href="#">Nav item three</a></li>
-        <li><a href="#">Nav item four</a></li>
-        <li><a href="#">Nav item five</a></li>
-    </ul>
-</nav>
+
+<!-- These will appear in the style guide -->
+
+<div data-sg-component='html-only'></div>
+
+<div data-sg-component='my-nav'></div>
+
 <section class="my-component" data-sg-component='my-component'>
     <h2>My component</h2>
     <p>
         Hello world
     </p>
 </section>
+
+<main>
+
+    <!-- The style guide will appear here -->
+
+    <div data-sg-layout></div>
+
+</main>
+
 </body>
 </html>

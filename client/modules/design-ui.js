@@ -10,6 +10,7 @@ window.Geta.SG.DesignUi = function(element, options){
                 cssClass: 'sg-design-ui',
                 name: null,
                 images: [],
+                documentation: null,
                 onSelect: $.noop,
                 onCancel: $.noop
             },
@@ -80,6 +81,7 @@ window.Geta.SG.DesignUi = function(element, options){
             images.sort(this._sortImages);
             return {
                 name: this.options.name,
+                documentation: this.options.documentation,
                 images: images
             };
         },

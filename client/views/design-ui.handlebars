@@ -1,7 +1,14 @@
 <header>
     <h2>{{name}}</h2>
-    <button class="sg-design-ui-buttons-toggle" data-buttons-toggle></button>
+    {{#if images.length}}
+        <button class="sg-button-pill" data-buttons-toggle></button>
+    {{/if}}
 </header>
+{{#if documentation.html}}
+    <div class="sg-design-ui-documentation">
+        {{{documentation.html}}}
+    </div>
+{{/if}}
 <div class="sg-design-ui-buttons" data-buttons>
     {{#each images}}
         <button value='{{#stringify this}}{{/stringify}}'>

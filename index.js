@@ -3,12 +3,18 @@ var path = require('path');
 var walk = require('walk');
 var sizeOf = require('image-size');
 var extend = require('util')._extend;
+var MarkdownIt = require('markdown-it');
+
+var componentId = 0;
 
 function Component(options){
     return extend(
         {
+            id: componentId++,
             name: null,
-            images: []
+            images: [],
+            documentation: null,
+            html: ''
         },
         options
     );
@@ -26,6 +32,10 @@ function Image(options){
     );
 }
 
+function Documentation(html){
+    return html;
+}
+
 var StyleGuide = function(src){
 
     return {
@@ -40,7 +50,7 @@ var StyleGuide = function(src){
                 {
                     listeners: {
                         directories: this._addComponent.bind(this),
-                        file: this._addImage.bind(this),
+                        file: this._addFile.bind(this),
                         errors: this._onError.bind(this)
                     }
                 }
@@ -67,14 +77,13 @@ var StyleGuide = function(src){
             }
         },
 
-        _addImage: function(root, fileStats, next) {
+        _addFile: function(root, fileStats, next) {
+            var directoryName = root.split(path.sep).pop();
             var fileName = path.join(root, fileStats.name);
             fileName = fileName.replace(/\\/g, '/');
-            var ext = fileStats.name.split('.').pop();
-            if(['jpg', 'png', 'gif'].indexOf(ext) > -1){
+            if(this._fileIsImage(fileName)){
                 var label = fileStats.name.split('.').shift();
                 var dimensions = sizeOf(fileName);
-                var directoryName = root.split(path.sep).pop();
                 this._addComponentByName(directoryName);
                 this._components[directoryName].images.push(
                     new Image({
@@ -84,6 +93,16 @@ var StyleGuide = function(src){
                         height: dimensions.height
                     })
                 );
+            }
+            else if(this._fileIsMarkdown(fileName)){
+                var md = new MarkdownIt();
+                var content = fs.readFileSync(fileName, 'utf-8');
+                this._components[directoryName].documentation = new Documentation({
+                    html: md.render(content)
+                })
+            }
+            else if(this._fileIsHtml(fileName)){
+                this._components[directoryName].html += fs.readFileSync(fileName, 'utf-8');
             }
             next();
         },
@@ -100,6 +119,21 @@ var StyleGuide = function(src){
         saveJson: function(dest){
             var json = this.toJson();
             fs.writeFileSync(dest, json);
+        },
+
+        _fileIsImage: function(fileName){
+            var ext = fileName.split('.').pop();
+            return ['jpg', 'png', 'gif'].indexOf(ext) > -1;
+        },
+
+        _fileIsMarkdown: function(fileName){
+            var ext = fileName.split('.').pop();
+            return ['md', 'markdown'].indexOf(ext) > -1;
+        },
+
+        _fileIsHtml: function(fileName){
+            var ext = fileName.split('.').pop();
+            return ['html'].indexOf(ext) > -1;
         }
 
     }._init();

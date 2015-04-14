@@ -10,8 +10,10 @@ window.Geta.SG.Component = function(element, options) {
         options: $.extend(
             {
                 cssClass: 'sg-component',
+                id: null,
                 name: null,
                 images: [],
+                documentation: null,
                 iframeHtml: function(html){ return html; },
                 iframeReady: function(iframe){}
             },
@@ -43,6 +45,7 @@ window.Geta.SG.Component = function(element, options) {
         _createContainer: function() {
             this._container = $('<div></div>')
                 .addClass(this.options.cssClass)
+                .attr('id', 'component-' + this.options.id)
                 .insertAfter(this.element);
         },
 
@@ -53,6 +56,7 @@ window.Geta.SG.Component = function(element, options) {
                 {
                     name: this.options.name,
                     images: this.options.images,
+                    documentation: this.options.documentation,
                     onSelect: $.proxy(this._compare, this),
                     onCancel: $.proxy(this._cancelCompare, this)
                 }
@@ -69,8 +73,8 @@ window.Geta.SG.Component = function(element, options) {
 
         _initElementContainer: function(){
             var element = $('<div></div>').appendTo(this._container);
-            this.element.appendTo(element);
             new window.Geta.SG.Element(element);
+            this.element.appendTo(element);
         },
 
         //
