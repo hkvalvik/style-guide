@@ -79,12 +79,12 @@ var StyleGuide = function(src){
 
         _addFile: function(root, fileStats, next) {
             var directoryName = root.split(path.sep).pop();
+            this._addComponentByName(directoryName);
             var fileName = path.join(root, fileStats.name);
             fileName = fileName.replace(/\\/g, '/');
             if(this._fileIsImage(fileName)){
                 var label = fileStats.name.split('.').shift();
                 var dimensions = sizeOf(fileName);
-                this._addComponentByName(directoryName);
                 this._components[directoryName].images.push(
                     new Image({
                         label: label,

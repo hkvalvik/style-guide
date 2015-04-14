@@ -70,22 +70,20 @@ window.Geta.SG.Main = function(element, options){
         },
 
         _initComponent: function(i, componentData){
-            var elements = this.element.find('[data-sg-component="'+componentData.name+'"], [data-sg-overlay="'+componentData.name+'"]');
             componentData = this._resolveImages(componentData);
+
+            // Find static, inline elements
+            var elements = this.element.find('[data-sg-component="'+componentData.name+'"], [data-sg-overlay="'+componentData.name+'"]');
+
+            if(componentData.html){
+                elements = $(componentData.html);
+            }
+
             elements.each($.proxy(this._initComponentElement, this, componentData));
         },
 
         _initComponentElement: function(componentData, i, el){
-            var element;
-            if(componentData.html){
-                element = $(componentData.html);
-                $(el).replaceWith(element);
-                console.log("...", el)
-            }
-            else {
-                var element = $(el);
-                element.removeAttr('data-sg-component');
-            }
+            var element = $(el);
 
             var componentContainer = this.element.find('[data-sg-layout-components]');
             element.appendTo(componentContainer);
