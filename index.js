@@ -4,6 +4,7 @@ var walk = require('walk');
 var sizeOf = require('image-size');
 var extend = require('util')._extend;
 var MarkdownIt = require('markdown-it');
+var sortObj = require('sort-object');
 
 var componentId = 0;
 
@@ -49,7 +50,6 @@ var StyleGuide = function(src){
                 this._fixSrc(src),
                 {
                     listeners: {
-                        //directories: this._addComponent.bind(this),
                         file: this._addFile.bind(this),
                         errors: this._onError.bind(this)
                     }
@@ -63,15 +63,8 @@ var StyleGuide = function(src){
             return src.split('/').join(path.sep);
         },
 
-        //_addComponent: function (root, dirStatsArray, next) {
-        //    var name = dirStatsArray[0].name;
-        //    this._addComponentByName(name);
-        //    next();
-        //},
-
         _addComponent: function(directoryName){
             var name = directoryName.split(path.sep).pop();
-            console.log(directoryName)
             if(!this._components[name]){
                 this._components[name] = new Component({
                     name: name
@@ -81,9 +74,7 @@ var StyleGuide = function(src){
 
         _addFile: function(root, fileStats, next) {
             var directoryName = root.split(path.sep).pop();
-
             this._addComponent(root);
-
             var fileName = path.join(root, fileStats.name);
             fileName = fileName.replace(/\\/g, '/');
             if(this._fileIsImage(fileName)){
@@ -117,7 +108,8 @@ var StyleGuide = function(src){
         },
 
         toJson: function(){
-            return JSON.stringify(this._components);
+            var compontents = sortObj(this._components);
+            return JSON.stringify(compontents);
         },
 
         saveJson: function(dest){
