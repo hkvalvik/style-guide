@@ -49,7 +49,7 @@ var StyleGuide = function(src){
                 this._fixSrc(src),
                 {
                     listeners: {
-                        directories: this._addComponent.bind(this),
+                        //directories: this._addComponent.bind(this),
                         file: this._addFile.bind(this),
                         errors: this._onError.bind(this)
                     }
@@ -63,13 +63,15 @@ var StyleGuide = function(src){
             return src.split('/').join(path.sep);
         },
 
-        _addComponent: function (root, dirStatsArray, next) {
-            var name = dirStatsArray[0].name;
-            this._addComponentByName(name);
-            next();
-        },
+        //_addComponent: function (root, dirStatsArray, next) {
+        //    var name = dirStatsArray[0].name;
+        //    this._addComponentByName(name);
+        //    next();
+        //},
 
-        _addComponentByName: function(name){
+        _addComponent: function(directoryName){
+            var name = directoryName.split(path.sep).pop();
+            console.log(directoryName)
             if(!this._components[name]){
                 this._components[name] = new Component({
                     name: name
@@ -79,7 +81,9 @@ var StyleGuide = function(src){
 
         _addFile: function(root, fileStats, next) {
             var directoryName = root.split(path.sep).pop();
-            this._addComponentByName(directoryName);
+
+            this._addComponent(root);
+
             var fileName = path.join(root, fileStats.name);
             fileName = fileName.replace(/\\/g, '/');
             if(this._fileIsImage(fileName)){

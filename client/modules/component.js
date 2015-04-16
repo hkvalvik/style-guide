@@ -46,6 +46,7 @@ window.Geta.SG.Component = function(element, options) {
             this._container = $('<div></div>')
                 .addClass(this.options.cssClass)
                 .attr('id', 'component-' + this.options.id)
+                .attr('data-component', this.options.name)
                 .insertAfter(this.element);
         },
 

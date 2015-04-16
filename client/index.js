@@ -21,12 +21,15 @@ window.Geta.SG.Main = function(element, options){
 
         _data: null,
 
+        _search: null,
+
         //
         // Initialize
         //
 
         _init: function(){
             this._initLayout();
+            this._search = new window.Geta.SG.Search(this.element);
             $.get(this.options.dataFile, $.proxy(this._onDataLoaded, this));
             return this;
         },
@@ -47,6 +50,7 @@ window.Geta.SG.Main = function(element, options){
             this._data = data;
             this._initNav(data);
             $.each(this._data, $.proxy(this._initComponent, this));
+            this._search.filterByUrlParameters();
             this.options.ready();
         },
 
@@ -76,7 +80,13 @@ window.Geta.SG.Main = function(element, options){
             var elements = this.element.find('[data-sg-component="'+componentData.name+'"], [data-sg-overlay="'+componentData.name+'"]');
 
             if(componentData.html){
-                elements = $(componentData.html);
+                var raw = $(componentData.html);
+
+                // Make sure the element is only one node
+                if(raw.length > 0){
+                    raw = $('<div></div>').html(raw);
+                }
+                elements = raw;
             }
 
             elements.each($.proxy(this._initComponentElement, this, componentData));
