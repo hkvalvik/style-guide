@@ -10,7 +10,7 @@ this["JST"]["client/views/design-comparator.handlebars"] = Handlebars.template({
 this["JST"]["client/views/design-ui.handlebars"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
   return "        <button class=\"sg-button-pill\" data-buttons-toggle></button>\r\n";
   },"3":function(depth0,helpers,partials,data) {
-  var stack1, lambda=this.lambda, buffer = "    <div class=\"sg-design-ui-documentation\">\r\n        ";
+  var stack1, lambda=this.lambda, buffer = "    <div class=\"markdown-body sg-design-ui-documentation\">\r\n        ";
   stack1 = lambda(((stack1 = (depth0 != null ? depth0.documentation : depth0)) != null ? stack1.html : stack1), depth0);
   if (stack1 != null) { buffer += stack1; }
   return buffer + "\r\n    </div>\r\n";
