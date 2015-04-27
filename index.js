@@ -47,11 +47,11 @@ module.exports = function(options){
 
         _createHead: function(){
             this._head += '<style>';
-            this._head += fs.readFileSync('./client.min.css', 'utf-8');
+            this._head += fs.readFileSync(__dirname +  '/client.min.css', 'utf-8');
             this._head += '</style>';
             this._head += '<script>';
             this._head += fs.readFileSync(require.resolve('jquery'), 'utf-8');
-            this._head += fs.readFileSync('./client.min.js', 'utf-8');
+            this._head += fs.readFileSync(__dirname + '/client.min.js', 'utf-8');
             this._head += '</script>';
         },
 
