@@ -7,6 +7,7 @@ var CategoryParser = require('./lib/category-parser');
 Handlebars.registerHelper('json', function(object) {
     var string = JSON.stringify(object);
     string = string.replace(/(?:\r\n|\r|\n)/g, ''); // Remove white space
+    string = string.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
     return string;
 });
 
@@ -47,6 +48,7 @@ module.exports = function(options){
 
         _createHead: function(){
             this._head += '<style>';
+            this._head += fs.readFileSync(__dirname +  '/.woff.css', 'utf-8');
             this._head += fs.readFileSync(__dirname +  '/client.min.css', 'utf-8');
             this._head += '</style>';
             this._head += '<script>';

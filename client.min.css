@@ -1,10 +1,13 @@
-@font-face {
-  font-family: "Flaticon";
-  src: url("client/scss/icons/flaticon.eot");
-  src: url("client/scss/icons/flaticon.eot#iefix") format("embedded-opentype"), url("client/scss/icons/flaticon.woff") format("woff"), url("client/scss/icons/flaticon.ttf") format("truetype"), url("client/scss/icons/flaticon.svg") format("svg");
-  font-weight: normal;
-  font-style: normal; }
-
+/*@font-face {
+	font-family: "Flaticon";
+	src: url("client/scss/icons/flaticon.eot");
+	src: url("client/scss/icons/flaticon.eot#iefix") format("embedded-opentype"),
+	url("client/scss/icons/flaticon.woff") format("woff"),
+	url("client/scss/icons/flaticon.ttf") format("truetype"),
+	url("client/scss/icons/flaticon.svg") format("svg");
+	font-weight: normal;
+	font-style: normal;
+}*/
 [class^="flaticon-"]:before, [class*=" flaticon-"]:before, [class^="flaticon-"]:after, [class*=" flaticon-"]:after {
   font-family: Flaticon;
   font-size: 20px;

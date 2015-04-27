@@ -35,6 +35,16 @@ module.exports = function(grunt) {
             }
         },
 
+        fontoptim: {
+            flaticon: {
+                src: 'client/scss/fonts/flaticon*',
+                dest: '',
+                options: {
+                    fontFamily: 'Flaticon'
+                }
+            }
+        },
+
         watch: {
             js: {
                 files: ['client/**/*.handlebars', 'client/**/*.js'],
@@ -43,6 +53,10 @@ module.exports = function(grunt) {
             scss: {
                 files: ['client/**/*.scss'],
                 tasks:  ['sass']
+            },
+            fontoptim: {
+                files: ['client/scss/fonts/*'],
+                tasks:  ['fontoptim']
             }
         },
 
@@ -75,8 +89,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-sass');
+    grunt.loadNpmTasks('grunt-fontoptim');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-connect');
 
-    grunt.registerTask('default', ['handlebars', 'uglify', 'sass']);
+    grunt.registerTask('default', ['handlebars', 'uglify', 'sass', 'fontoptim']);
 };

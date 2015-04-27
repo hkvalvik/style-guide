@@ -1,6 +1,6 @@
 $path: "client/scss/icons/";
 
-@font-face {
+/*@font-face {
 	font-family: "Flaticon";
 	src: url("#{$path}flaticon.eot");
 	src: url("#{$path}flaticon.eot#iefix") format("embedded-opentype"),
@@ -9,7 +9,7 @@ $path: "client/scss/icons/";
 	url("#{$path}flaticon.svg") format("svg");
 	font-weight: normal;
 	font-style: normal;
-}
+}*/
 
 @mixin icon($type){
   @extend .#{$type};
