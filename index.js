@@ -47,10 +47,10 @@ module.exports = function(options){
 
         _createHead: function(){
             this._head += '<style>';
-            this._head += fs.readFileSync('./node_modules/jquery/dist/jquery.min.js', 'utf-8');
+            this._head += fs.readFileSync('./client.min.css', 'utf-8');
             this._head += '</style>';
             this._head += '<script>';
-            this._head += fs.readFileSync('./node_modules/jquery/dist/jquery.min.js', 'utf-8');
+            this._head += fs.readFileSync(require.resolve('jquery'), 'utf-8');
             this._head += fs.readFileSync('./client.min.js', 'utf-8');
             this._head += '</script>';
         },
@@ -76,6 +76,7 @@ module.exports = function(options){
             var fileName = [dest, category.name + '.html'].join(path.sep);
             var viewData = extend(
                 {
+                    head: this._head,
                     category: category,
                     menuItems: this._menuItems
                 },
