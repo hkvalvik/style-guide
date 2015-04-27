@@ -1,138 +1,89 @@
 var fs = require('fs');
 var path = require('path');
-var walk = require('walk');
-var sizeOf = require('image-size');
 var extend = require('util')._extend;
-var MarkdownIt = require('markdown-it');
-var sortObj = require('sort-object');
+var Handlebars = require('handlebars');
+var CategoryParser = require('./lib/category-parser');
 
-var componentId = 0;
+Handlebars.registerHelper('json', function(object) {
+    var string = JSON.stringify(object);
+    string = string.replace(/(?:\r\n|\r|\n)/g, ''); // Remove white space
+    return string;
+});
 
-function Component(options){
-    return extend(
-        {
-            id: componentId++,
-            name: null,
-            images: [],
-            documentation: null,
-            html: ''
-        },
-        options
-    );
-}
+Handlebars.registerHelper('selected-class', function(a, b) {
+    return a == b ? 'selected' : '';
+});
 
-function Image(options){
-    return extend(
-        {
-            label: null,
-            file: null,
-            width: null,
-            height: null
-        },
-        options
-    );
-}
-
-function Documentation(html){
-    return html;
-}
-
-var StyleGuide = function(src){
+module.exports = function(options){
 
     return {
 
-        _src: src,
+        options: extend(
+            {
+                src: null,
+                dest: null,
+                template: null, // Path to handlebars template
+                heading: null
+            },
+            options
+        ),
 
-        _components: {},
+        _categories: {},
+
+        _menuItems: [],
+
+        _template: null,
+
+        _head: '',
 
         _init: function(){
-            walk.walkSync(
-                this._fixSrc(src),
-                {
-                    listeners: {
-                        file: this._addFile.bind(this),
-                        errors: this._onError.bind(this)
-                    }
-                }
-            );
+            var parser = new CategoryParser(this.options.src);
+            this._categories = parser.getCategories();
+            this._menuItems = this._getMenuItems();
+            this._template = Handlebars.compile(fs.readFileSync(this.options.template, 'utf-8'));
+            this._createHead();
             return this;
         },
 
-        // Looks like there's a problem with Windows paths in node-walk
-        _fixSrc: function(src){
-            return src.split('/').join(path.sep);
+        _createHead: function(){
+            this._head += '<style>';
+            this._head += fs.readFileSync('./node_modules/jquery/dist/jquery.min.js', 'utf-8');
+            this._head += '</style>';
+            this._head += '<script>';
+            this._head += fs.readFileSync('./node_modules/jquery/dist/jquery.min.js', 'utf-8');
+            this._head += fs.readFileSync('./client.min.js', 'utf-8');
+            this._head += '</script>';
         },
 
-        _addComponent: function(directoryName){
-            var name = directoryName.split(path.sep).pop();
-            if(!this._components[name]){
-                this._components[name] = new Component({
-                    name: name
+        save: function(dest, templatePath){
+            for(var category in this._categories){
+                this._saveHtml(dest, this._categories[category]);
+            }
+        },
+
+        _getMenuItems: function(){
+            var items = [];
+            for(var category in this._categories){
+                items.push({
+                    href: category + '.html',
+                    label: category
                 });
             }
+            return items;
         },
 
-        _addFile: function(root, fileStats, next) {
-            var directoryName = root.split(path.sep).pop();
-            this._addComponent(root);
-            var fileName = path.join(root, fileStats.name);
-            fileName = fileName.replace(/\\/g, '/');
-            if(this._fileIsImage(fileName)){
-                var label = fileStats.name.split('.').shift();
-                var dimensions = sizeOf(fileName);
-                this._components[directoryName].images.push(
-                    new Image({
-                        label: label,
-                        file: fileName,
-                        width: dimensions.width,
-                        height: dimensions.height
-                    })
-                );
-            }
-            else if(this._fileIsMarkdown(fileName)){
-                var md = new MarkdownIt();
-                var content = fs.readFileSync(fileName, 'utf-8');
-                this._components[directoryName].documentation = new Documentation({
-                    html: md.render(content)
-                })
-            }
-            else if(this._fileIsHtml(fileName)){
-                this._components[directoryName].html += fs.readFileSync(fileName, 'utf-8');
-            }
-            next();
-        },
-
-        _onError: function(root, nodeStatsArray, next) {
-            console.error(arguments);
-            next();
-        },
-
-        toJson: function(){
-            var compontents = sortObj(this._components);
-            return JSON.stringify(compontents);
-        },
-
-        saveJson: function(dest){
-            var json = this.toJson();
-            fs.writeFileSync(dest, json);
-        },
-
-        _fileIsImage: function(fileName){
-            var ext = fileName.split('.').pop();
-            return ['jpg', 'png', 'gif'].indexOf(ext) > -1;
-        },
-
-        _fileIsMarkdown: function(fileName){
-            var ext = fileName.split('.').pop();
-            return ['md', 'markdown'].indexOf(ext) > -1;
-        },
-
-        _fileIsHtml: function(fileName){
-            var ext = fileName.split('.').pop();
-            return ['html'].indexOf(ext) > -1;
+        _saveHtml: function(dest, category){
+            var fileName = [dest, category.name + '.html'].join(path.sep);
+            var viewData = extend(
+                {
+                    category: category,
+                    menuItems: this._menuItems
+                },
+                this.options
+            );
+            var html = this._template(viewData);
+            fs.writeFileSync(fileName, html);
         }
 
     }._init();
 };
-
-module.exports = StyleGuide;

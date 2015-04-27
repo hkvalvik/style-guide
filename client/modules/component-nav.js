@@ -1,4 +1,4 @@
-window.Geta.SG.Nav = function(element, options){
+window.Geta.SG.ComponentNav = function(element, options){
     return {
 
         //
@@ -9,7 +9,8 @@ window.Geta.SG.Nav = function(element, options){
             {
                 cssClass: 'sg-nav',
                 components: {},
-                onSelect: function(id){}
+                onSelect: function(id){},
+                toggle: null
             },
             options
         ),
@@ -22,21 +23,30 @@ window.Geta.SG.Nav = function(element, options){
 
         _init: function(){
             this._initView();
+            this.options.toggle.click($.proxy(this._toggleNav, this));
             return this;
         },
 
         _initView: function(){
-            var html = window['JST']['client/views/nav.handlebars'](this.options.components);
-            this.element.html(html);
             this.element.addClass(this.options.cssClass);
             this.element.find('a').click($.proxy(this._onSelect, this));
         },
 
+        //
+        // Events
+        //
+
+        _toggleNav: function(event){
+            event.preventDefault();
+            this.element.toggleClass('on');
+        },
+
         _onSelect: function(event){
             event.preventDefault();
-            var id = $(event.currentTarget).attr('href').replace('#!', '');
+            var button = $(event.currentTarget);
+            button.parent().addClass('selected').siblings().removeClass('selected');
+            var id = button.attr('href').replace('#!', '');
             this.options.onSelect(id);
-
         }
 
     }._init();

@@ -66,16 +66,27 @@ $sg-z-index-start: 9999;
   // Css here will leak into the element
 }
 
-.sg-layout-header {
+.sg-header {
   @include sg-box-sizing;
   @include sg-font;
+  overflow: hidden;
+  padding-top: $sg-gutter;
+  padding-bottom: $sg-gutter;
 
   h1 {
+    float: left;
+    width: 30%;
     font-size: 24px;
     text-transform: uppercase;
-    padding: 24px 0;
+    padding: 0;
+    margin: 0;
     font-weight: normal;
     font-family: $sg-font-family;
+  }
+
+  .sg-primary-nav {
+    float: left;
+    width: 70%;
   }
 
   .sg-button-pill {
@@ -90,23 +101,18 @@ $sg-z-index-start: 9999;
 .sg-component {
   // Css here will leak into the element
   border-top: solid 1px #eee;
-  margin-bottom: 40px;
 }
 
-.sg-nav {
+//
+// Navigation
+//
+
+.sg-component-nav,
+.sg-primary-nav {
   @include sg-box-sizing;
-  position: fixed;
-  z-index: $sg-z-index-start;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  height: 100%;
+  @include sg-font;
   background-color: #fff;
-  padding: $sg-gutter ($sg-gutter*2);
-  box-shadow: 0 0 10px rgba(black, .5);
-  overflow: auto;
-  transform: translateX(100%);
-  transition: transform .5s;
+  text-transform: uppercase;
 
   ul {
     list-style: none;
@@ -116,7 +122,46 @@ $sg-z-index-start: 9999;
 
   li {
     padding: 0;
-    margin: 0 0 $sg-gutter/2 0;
+    margin: 0;
+    color: $sg-color-primary;
+    border-bottom: solid 1px transparent;
+
+    &.selected {
+      color: black;
+      border-bottom-color: $sg-color-primary;
+    }
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+.sg-primary-nav {
+  padding-top: 10px;
+
+  li {
+    display: inline-block;
+    margin-right: $sg-gutter;
+  }
+}
+
+.sg-component-nav {
+  position: fixed;
+  z-index: $sg-z-index-start;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  padding: $sg-gutter ($sg-gutter*4) $sg-gutter ($sg-gutter*2);
+  box-shadow: 0 0 10px rgba(black, .5);
+  overflow: auto;
+  transform: translateX(100%);
+  transition: transform .5s;
+
+  li {
+    margin-bottom: $sg-gutter/2;
   }
 
   &.on {

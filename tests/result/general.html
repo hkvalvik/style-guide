@@ -1,0 +1,52 @@
+<html>
+<head>
+    <link rel="stylesheet" href="../../client.min.css">
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../client.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            new Geta.SG.Main($('body'), {
+                heading: 'My style guide',
+                data: {"html-only":{"id":6,"name":"html-only","images":[],"documentation":null,"html":"<div class=\"html-only\">\r\n    This component has\r\n    <em>no design sketches</em>\r\n</div>\r\n<div class=\"html-only\">\r\n    Another identical\r\n    <em>component</em>\r\n</div>"},"my-component":{"id":5,"name":"my-component","images":[{"label":"large","file":"tests/fixtures/general/my-component/large.jpg","width":1480,"height":142},{"label":"medium","file":"tests/fixtures/general/my-component/medium.jpg","width":808,"height":142},{"label":"small","file":"tests/fixtures/general/my-component/small.jpg","width":360,"height":142}],"documentation":null,"html":""},"my-nav":{"id":4,"name":"my-nav","images":[{"label":"large","file":"tests/fixtures/general/my-nav/large.jpg","width":1689,"height":90},{"label":"medium","file":"tests/fixtures/general/my-nav/medium.jpg","width":808,"height":192},{"label":"small","file":"tests/fixtures/general/my-nav/small.jpg","width":360,"height":174}],"documentation":{"html":"<h2>Where to use</h2>\n<p>Use this component on any page that requires navigation</p>\n<h3>Limitations</h3>\n<p>Adding too many menu items will make the design break.</p>\n<ul>\n<li>List item one</li>\n<li>List item two</li>\n</ul>\n"},"html":"<nav class=\"my-nav\">\r\n    <ul>\r\n        <li><a href=\"#\">Nav item one</a></li>\r\n        <li><a href=\"#\">Nav item two</a></li>\r\n        <li><a href=\"#\">Nav item three</a></li>\r\n        <li><a href=\"#\">Nav item four</a></li>\r\n        <li><a href=\"#\">Nav item five</a></li>\r\n    </ul>\r\n</nav>"}},
+                imageResolver: function(path){ return '/' + path; }
+            });
+        });
+    </script>
+    <link rel="stylesheet" href="../index.css">
+</head>
+<body>
+<main>
+    <section class="sg-layout">
+        <header class="sg-header">
+            <h1>My style guide</h1>
+            <nav class="sg-primary-nav">
+                <ul>
+                        <li class="">
+                            <a href="buttons.html">buttons</a>
+                        </li>
+                        <li class="selected">
+                            <a href="general.html">general</a>
+                        </li>
+                </ul>
+            </nav>
+            <button data-sg-component-nav-toggle class="sg-button-pill"></button>
+        </header>
+        <nav data-sg-component-nav class="sg-component-nav">
+            <ul>
+                    <li>
+                        <a href="#!6">html-only</a>
+                    </li>
+                    <li>
+                        <a href="#!5">my-component</a>
+                    </li>
+                    <li>
+                        <a href="#!4">my-nav</a>
+                    </li>
+            </ul>
+        </nav>
+        <div data-sg-layout-components></div>
+    </section>
+</main>
+</body>
+</html>

@@ -58,7 +58,9 @@ module.exports = function(grunt) {
         'style-guide': {
             dist: {
                 src: 'tests/fixtures',
-                dest: 'tests/result/result.json'
+                dest: 'tests/result',
+                template: 'tests/template.handlebars',
+                heading: 'My style guide'
             }
         }
     });
@@ -66,8 +68,8 @@ module.exports = function(grunt) {
     grunt.registerMultiTask('style-guide', '', function () {
         var StyleGuide = require('./index');
         var done = this.async();
-        var styleGuide = new StyleGuide(this.data.src);
-        styleGuide.saveJson(this.data.dest);
+        var styleGuide = new StyleGuide(this.data);
+        styleGuide.save(this.data.dest);
     });
 
     grunt.loadNpmTasks('grunt-contrib-handlebars');

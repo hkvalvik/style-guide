@@ -1,0 +1,47 @@
+<html>
+<head>
+    <link rel="stylesheet" href="../../client.min.css">
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../client.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            new Geta.SG.Main($('body'), {
+                heading: '{{heading}}',
+                data: {{#json category.components}}{{/json}},
+                imageResolver: function(path){ return '/' + path; }
+            });
+        });
+    </script>
+    <link rel="stylesheet" href="../index.css">
+</head>
+<body>
+<main>
+    <section class="sg-layout">
+        <header class="sg-header">
+            <h1>{{{heading}}}</h1>
+            <nav class="sg-primary-nav">
+                <ul>
+                    {{#each menuItems}}
+                        <li class="{{#selected-class label ../category.name}}{{/selected-class}}">
+                            <a href="{{href}}">{{label}}</a>
+                        </li>
+                    {{/each}}
+                </ul>
+            </nav>
+            <button data-sg-component-nav-toggle class="sg-button-pill"></button>
+        </header>
+        <nav data-sg-component-nav class="sg-component-nav">
+            <ul>
+                {{#each category.components}}
+                    <li>
+                        <a href="#!{{id}}">{{name}}</a>
+                    </li>
+                {{/each}}
+            </ul>
+        </nav>
+        <div data-sg-layout-components></div>
+    </section>
+</main>
+</body>
+</html>

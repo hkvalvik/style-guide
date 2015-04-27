@@ -1,0 +1,55 @@
+<html>
+<head>
+    <link rel="stylesheet" href="../../client.min.css">
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../client.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            new Geta.SG.Main($('body'), {
+                heading: 'My style guide',
+                data: {"blue":{"id":3,"name":"blue","images":[],"documentation":null,"html":"<button class=\"button-blue\">Blue button</button>"},"buttons":{"id":0,"name":"buttons","images":[],"documentation":{"html":"<h1>Buttons</h1>\n<p>Lorem ipsum</p>\n"},"html":""},"green":{"id":2,"name":"green","images":[],"documentation":null,"html":"<button class=\"button-green\">Green button</button>"},"red":{"id":1,"name":"red","images":[],"documentation":null,"html":"<button class=\"button-red\">Red button</button>"}},
+                imageResolver: function(path){ return '/' + path; }
+            });
+        });
+    </script>
+    <link rel="stylesheet" href="../index.css">
+</head>
+<body>
+<main>
+    <section class="sg-layout">
+        <header class="sg-header">
+            <h1>My style guide</h1>
+            <nav class="sg-primary-nav">
+                <ul>
+                        <li class="selected">
+                            <a href="buttons.html">buttons</a>
+                        </li>
+                        <li class="">
+                            <a href="general.html">general</a>
+                        </li>
+                </ul>
+            </nav>
+            <button data-sg-component-nav-toggle class="sg-button-pill"></button>
+        </header>
+        <nav data-sg-component-nav class="sg-component-nav">
+            <ul>
+                    <li>
+                        <a href="#!3">blue</a>
+                    </li>
+                    <li>
+                        <a href="#!0">buttons</a>
+                    </li>
+                    <li>
+                        <a href="#!2">green</a>
+                    </li>
+                    <li>
+                        <a href="#!1">red</a>
+                    </li>
+            </ul>
+        </nav>
+        <div data-sg-layout-components></div>
+    </section>
+</main>
+</body>
+</html>

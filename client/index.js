@@ -7,8 +7,7 @@ window.Geta.SG.Main = function(element, options){
 
         options: $.extend(
             {
-                heading: undefined,
-                dataFile: null,
+                data: null,
                 imageResolver: function(path){ return path; },
                 ready: $.noop,
                 iframeHtml: function(html){ return html; },
@@ -28,31 +27,17 @@ window.Geta.SG.Main = function(element, options){
         //
 
         _init: function(){
-            this._initLayout();
             this._search = new window.Geta.SG.Search(this.element);
-            $.get(this.options.dataFile, $.proxy(this._onDataLoaded, this));
+            this._initComponentNavigation(this.options.data);
+            $.each(this.options.data, $.proxy(this._initComponent, this));
+            this._search.filterByUrlParameters();
+            this.options.ready();
             return this;
-        },
-
-        _initLayout: function(){
-            var element = this.element.find('[data-sg-layout]');
-            if(element.length == 0){
-                element = $('<div></div>').appendTo(this.element);
-            }
-            new window.Geta.SG.Layout(element, {heading: this.options.heading});
         },
 
         //
         // Events
         //
-
-        _onDataLoaded: function(data){
-            this._data = data;
-            this._initNav(data);
-            $.each(this._data, $.proxy(this._initComponent, this));
-            this._search.filterByUrlParameters();
-            this.options.ready();
-        },
 
         _onComponentSelect: function(id){
             var target = this.element.find('#component-' + id);
@@ -65,11 +50,12 @@ window.Geta.SG.Main = function(element, options){
         // Helpers
         //
 
-        _initNav: function(data){
-            var element = this.element.find('[data-sg-layout-nav]');
-            new window.Geta.SG.Nav(element, {
+        _initComponentNavigation: function(data){
+            var element = this.element.find('[data-sg-component-nav]');
+            new window.Geta.SG.ComponentNav(element, {
                 components: data,
-                onSelect: $.proxy(this._onComponentSelect, this)
+                onSelect: $.proxy(this._onComponentSelect, this),
+                toggle: this.element.find('[data-sg-component-nav-toggle]')
             });
         },
 
