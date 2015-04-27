@@ -1821,6 +1821,9 @@
 .sg-component {
   border-top: solid 1px #eee; }
 
+.sg-category-documentation {
+  margin-bottom: 20px; }
+
 .sg-component-nav, .sg-primary-nav {
   font-family: arial, helvetica, clean, sans-serif;
   font-size: 14px;
