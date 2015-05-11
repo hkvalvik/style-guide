@@ -23,9 +23,9 @@ module.exports = function(options){
             {
                 src: null,
                 dest: null,
-                indexTemplate: 'views/index.handlebars',
-                template: 'views/template.handlebars',
-                headerTemplate: 'views/partials/header.handlebars',
+                indexTemplate: __dirname +  '/views/index.handlebars',
+                template: __dirname +  '/views/template.handlebars',
+                headerTemplate: __dirname +  '/views/partials/header.handlebars',
                 heading: null
             },
             options
