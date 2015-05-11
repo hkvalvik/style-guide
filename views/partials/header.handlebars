@@ -1,0 +1,17 @@
+<header class="sg-header">
+    <h1>
+        <a href="index.html">
+            {{{heading}}}
+        </a>
+    </h1>
+    <nav class="sg-primary-nav">
+        <ul>
+            {{#each menuItems}}
+                <li class="{{#selected-class label ../category.name}}{{/selected-class}}">
+                    <a href="{{href}}">{{label}}</a>
+                </li>
+            {{/each}}
+        </ul>
+    </nav>
+    <button data-sg-component-nav-toggle class="sg-button-pill"></button>
+</header>

@@ -23,7 +23,9 @@ module.exports = function(options){
             {
                 src: null,
                 dest: null,
-                template: null, // Path to handlebars template
+                indexTemplate: 'views/index.handlebars',
+                template: 'views/template.handlebars',
+                headerTemplate: 'views/partials/header.handlebars',
                 heading: null
             },
             options
@@ -31,36 +33,52 @@ module.exports = function(options){
 
         _categories: {},
 
-        _menuItems: [],
-
         _template: null,
 
-        _head: '',
+        _indexTemplate: null,
+
+        _headerTemplate: null,
+
+        _viewData: null,
 
         _init: function(){
             var parser = new CategoryParser(this.options.src);
             this._categories = parser.getCategories();
-            this._menuItems = this._getMenuItems();
             this._template = Handlebars.compile(fs.readFileSync(this.options.template, 'utf-8'));
-            this._createHead();
+            this._indexTemplate = Handlebars.compile(fs.readFileSync(this.options.indexTemplate, 'utf-8'));
+            this._headerTemplate = Handlebars.compile(fs.readFileSync(this.options.headerTemplate, 'utf-8'));
+            this._viewData = this._getViewData();
             return this;
         },
 
-        _createHead: function(){
-            this._head += '<style>';
-            this._head += fs.readFileSync(__dirname +  '/.woff.css', 'utf-8');
-            this._head += fs.readFileSync(__dirname +  '/client.min.css', 'utf-8');
-            this._head += '</style>';
-            this._head += '<script>';
-            this._head += fs.readFileSync(require.resolve('jquery'), 'utf-8');
-            this._head += fs.readFileSync(__dirname + '/client.min.js', 'utf-8');
-            this._head += '</script>';
+        _getViewData: function(){
+            return extend(
+                {
+                    head: this._getHead(),
+                    header: this._getHeader()
+                },
+                this.options
+            );
         },
 
-        save: function(dest, templatePath){
-            for(var category in this._categories){
-                this._saveHtml(dest, this._categories[category]);
-            }
+        _getHead: function(){
+            var head = '';
+            head += '<style>';
+            head += fs.readFileSync(__dirname +  '/.woff.css', 'utf-8');
+            head += fs.readFileSync(__dirname +  '/client.min.css', 'utf-8');
+            head += '</style>';
+            head += '<script>';
+            head += fs.readFileSync(require.resolve('jquery'), 'utf-8');
+            head += fs.readFileSync(__dirname + '/client.min.js', 'utf-8');
+            head += '</script>';
+            return head;
+        },
+
+        _getHeader: function(){
+            return this._headerTemplate({
+                heading: this.options.heading,
+                menuItems: this._getMenuItems()
+            });
         },
 
         _getMenuItems: function(){
@@ -74,15 +92,36 @@ module.exports = function(options){
             return items;
         },
 
-        _saveHtml: function(dest, category){
+        save: function(dest){
+            this._clean();
+            this._saveIndexPage(dest);
+            for(var category in this._categories){
+                this._saveCategoryPage(dest, this._categories[category]);
+            }
+        },
+
+        _clean: function(){
+            var dest = this.options.dest;
+            fs.existsSync(dest) || fs.mkdirSync(dest);
+            var files = fs.readdirSync(dest);
+            files.forEach(function(file){
+                fs.unlinkSync([dest, file].join(path.sep));
+            });
+        },
+
+        _saveIndexPage: function(dest){
+            var fileName = [dest, 'index' + '.html'].join(path.sep);
+            var html = this._indexTemplate(this._viewData);
+            fs.writeFileSync(fileName, html);
+        },
+
+        _saveCategoryPage: function(dest, category){
             var fileName = [dest, category.name + '.html'].join(path.sep);
             var viewData = extend(
                 {
-                    head: this._head,
-                    category: category,
-                    menuItems: this._menuItems
+                    category: category
                 },
-                this.options
+                this._viewData
             );
             var html = this._template(viewData);
             fs.writeFileSync(fileName, html);

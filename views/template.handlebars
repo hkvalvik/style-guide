@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     {{{head}}}
@@ -14,20 +15,8 @@
 </head>
 <body>
 <main>
-    <section class="sg-layout">
-        <header class="sg-header">
-            <h1>{{{heading}}}</h1>
-            <nav class="sg-primary-nav">
-                <ul>
-                    {{#each menuItems}}
-                        <li class="{{#selected-class label ../category.name}}{{/selected-class}}">
-                            <a href="{{href}}">{{label}}</a>
-                        </li>
-                    {{/each}}
-                </ul>
-            </nav>
-            <button data-sg-component-nav-toggle class="sg-button-pill"></button>
-        </header>
+    <div class="sg-layout">
+        {{{header}}}
         <nav data-sg-component-nav class="sg-component-nav">
             <ul>
                 {{#each category.components}}
@@ -41,7 +30,7 @@
             {{{category.html}}}
         </div>
         <div data-sg-layout-components></div>
-    </section>
+    </div>
 </main>
 </body>
 </html>

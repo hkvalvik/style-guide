@@ -73,7 +73,6 @@ module.exports = function(grunt) {
             dist: {
                 src: 'tests/fixtures',
                 dest: 'tests/result',
-                template: 'tests/template.handlebars',
                 heading: 'My style guide'
             }
         }
